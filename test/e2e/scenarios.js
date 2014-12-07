@@ -2,12 +2,17 @@
 
 /* http://docs.angularjs.org/guide/dev_guide.e2e-testing */
 
+var chai=require('chai');
+var chaiAsPromised=require('chai-as-promised');
+chai.use(chaiAsPromised);
+var expect=chai.expect;
+
 describe('PhoneCat App', function() {
 
   it('should redirect index.html to index.html#/phones', function() {
     browser.get('app/index.html');
     browser.getLocationAbsUrl().then(function(url) {
-        expect(url.split('#')[1]).toBe('/phones');
+        expect(url.split('#')[1]).to.equal('/phones');
       });
   });
 
@@ -24,14 +29,14 @@ describe('PhoneCat App', function() {
       var phoneList = element.all(by.repeater('phone in phones'));
       var query = element(by.model('query'));
 
-      expect(phoneList.count()).toBe(20);
+      expect(phoneList.count()).to.eventually.equal(20);
 
       query.sendKeys('nexus');
-      expect(phoneList.count()).toBe(1);
+      expect(phoneList.count()).to.eventually.equal(1);
 
       query.clear();
       query.sendKeys('motorola');
-      expect(phoneList.count()).toBe(8);
+      expect(phoneList.count()).to.eventually.equal(8);
     });
 
 
@@ -48,14 +53,14 @@ describe('PhoneCat App', function() {
 
       query.sendKeys('tablet'); //let's narrow the dataset to make the test assertions shorter
 
-      expect(getNames()).toEqual([
+      expect(getNames()).to.eventually.eql([
         "Motorola XOOM\u2122 with Wi-Fi",
         "MOTOROLA XOOM\u2122"
       ]);
 
       element(by.model('orderProp')).element(by.css('option[value="name"]')).click();
 
-      expect(getNames()).toEqual([
+      expect(getNames()).to.eventually.eql([
         "MOTOROLA XOOM\u2122",
         "Motorola XOOM\u2122 with Wi-Fi"
       ]);
@@ -67,7 +72,7 @@ describe('PhoneCat App', function() {
       query.sendKeys('nexus');
       element.all(by.css('.phones li a')).first().click();
       browser.getLocationAbsUrl().then(function(url) {
-        expect(url.split('#')[1]).toBe('/phones/nexus-s');
+        expect(url.split('#')[1]).to.equal('/phones/nexus-s');
       });
     });
   });
@@ -81,21 +86,21 @@ describe('PhoneCat App', function() {
 
 
     it('should display nexus-s page', function() {
-      expect(element(by.binding('phone.name')).getText()).toBe('Nexus S');
+      expect(element(by.binding('phone.name')).getText()).to.eventually.equal('Nexus S');
     });
 
 
     it('should display the first phone image as the main phone image', function() {
-      expect(element(by.css('img.phone.active')).getAttribute('src')).toMatch(/img\/phones\/nexus-s.0.jpg/);
+      expect(element(by.css('img.phone.active')).getAttribute('src')).to.eventually.match(/img\/phones\/nexus-s.0.jpg/);
     });
 
 
     it('should swap main image if a thumbnail image is clicked on', function() {
       element(by.css('.phone-thumbs li:nth-child(3) img')).click();
-      expect(element(by.css('img.phone.active')).getAttribute('src')).toMatch(/img\/phones\/nexus-s.2.jpg/);
+      expect(element(by.css('img.phone.active')).getAttribute('src')).to.eventually.match(/img\/phones\/nexus-s.2.jpg/);
 
       element(by.css('.phone-thumbs li:nth-child(1) img')).click();
-      expect(element(by.css('img.phone.active')).getAttribute('src')).toMatch(/img\/phones\/nexus-s.0.jpg/);
+      expect(element(by.css('img.phone.active')).getAttribute('src')).to.eventually.match(/img\/phones\/nexus-s.0.jpg/);
     });
   });
 });

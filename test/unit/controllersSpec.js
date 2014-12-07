@@ -4,10 +4,8 @@
 describe('PhoneCat controllers', function() {
 
   beforeEach(function(){
-    this.addMatchers({
-      toEqualData: function(expected) {
-        return angular.equals(this.actual, expected);
-      }
+    chai.Assertion.addMethod('toEqualData', function(expected) {
+      return angular.equals(this.actual, expected);
     });
   });
 
@@ -37,7 +35,7 @@ describe('PhoneCat controllers', function() {
 
 
     it('should set the default value of orderProp model', function() {
-      expect(scope.orderProp).toBe('age');
+      expect(scope.orderProp).to.equal('age');
     });
   });
 

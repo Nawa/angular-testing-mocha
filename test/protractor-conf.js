@@ -6,16 +6,21 @@ exports.config = {
   ],
 
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'chromeOptions': {
+      args: ['--test-type']
+    }
   },
 
   chromeOnly: true,
 
   baseUrl: 'http://localhost:8000/',
 
-  framework: 'jasmine',
+  framework: 'mocha',
 
-  jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000
+  mochaOpts:{
+    reporter:'spec',
+    slow:3000,
+    timeout: 30000
   }
 };
